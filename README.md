@@ -34,3 +34,16 @@ Summary statistics of RNAseq trial.  Look at coverage of plant-bacteria, complet
 6b. Bacterial liquid culture data: Map reads to Rhizobia. Changed  max number of collapsed junctions 1000000 -> 2000000
  
           for FILE in $(ls trial*_UnmappedMedicago_R1.fastq ); do echo $FILE; sbatch --partition=pibu_el8 --job-name=$(echo $FILE | cut -d'_' -f1,2)_1STAR --time=0-04:00:00 --mem-per-cpu=128G --ntasks=8 --cpus-per-task=1 --output=$(echo $FILE | cut -d'_' -f1,2)_STAR.out --error=$(echo $FILE | cut -d'_' -f1,2)_STAR.error --mail-type=END,FAIL --wrap "module load STAR/2.7.10a_alpha_220601-GCC-10.3.0; cd /data/users/imateusgonzalez/2024_RNAseqTrial/03_UnmappedReads; STAR --runThreadN 8 --limitOutSJcollapsed 2000000 --genomeDir /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia --readFilesIn $FILE $(echo $FILE | cut -d'_' -f1,2)_UnmappedMedicago_R2.fastq --outFileNamePrefix $(echo $FILE | cut -d'_' -f1,2)_MappedRhizobia --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 1065539232"; sleep  1; done
+
+
+
+7. Count reads on features # need to install tool
+   
+http://bioinf.wehi.edu.au/featureCounts/
+
+USE gff from Genome mapped reference
+
+    module load Bioinformatics/Software/vital-it; module add UHTS/Analysis/subread/1.6.0;
+    
+    for FILE in $(ls *.out.bam ); do echo $FILE; sbatch --partition=pshort_el8 --job-name=FC_$(echo $FILE | cut -d'_' -f1,2) --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=FC_$(echo $FILE | cut -d'_' -f1,2).out --error=FC_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "featureCounts -t CDS -g ID -a /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff  -o CountsTable_$(echo $FILE | cut -d'_' -f1,2).txt $FILE -T 8"; sleep  1; done
+ 
