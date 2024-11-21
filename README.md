@@ -47,3 +47,12 @@ USE gff from Genome mapped reference
     
     for FILE in $(ls *.out.bam ); do echo $FILE; sbatch --partition=pshort_el8 --job-name=FC_$(echo $FILE | cut -d'_' -f1,2) --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=FC_$(echo $FILE | cut -d'_' -f1,2).out --error=FC_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "featureCounts -t CDS -g ID -a /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff  -o CountsTable_$(echo $FILE | cut -d'_' -f1,2).txt $FILE -T 8"; sleep  1; done
  
+htseq-count -f sam -r pos -s no -i gene_id aligned_reads.sam genes.gtf > gene_counts.txt
+Explanation of Parameters:
+
+    -f: Specifies input format (sam or bam).
+    -r: Order of alignments in the input file (pos for position, name for read name).
+    -s: Strand-specific option (yes, no, or reverse).
+    -i: Attribute in the GTF file to use as gene ID (default is gene_id).
+    aligned_reads.sam: Path to the SAM/BAM file.
+    genes.gtf: Path to the GTF file.
