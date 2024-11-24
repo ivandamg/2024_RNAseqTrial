@@ -38,21 +38,12 @@ Summary statistics of RNAseq trial.  Look at coverage of plant-bacteria, complet
 
 
 7. Count reads on features # need to install tool
-   
-http://bioinf.wehi.edu.au/featureCounts/
+https://subread.sourceforge.net/featureCounts.html
+
+
 
 USE gff from Genome mapped reference
-
-    module load Bioinformatics/Software/vital-it; module add UHTS/Analysis/subread/1.6.0;
     
-    for FILE in $(ls *.out.bam ); do echo $FILE; sbatch --partition=pshort_el8 --job-name=FC_$(echo $FILE | cut -d'_' -f1,2) --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=FC_$(echo $FILE | cut -d'_' -f1,2).out --error=FC_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "featureCounts -t CDS -g ID -a /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff  -o CountsTable_$(echo $FILE | cut -d'_' -f1,2).txt $FILE -T 8"; sleep  1; done
- 
-htseq-count -f sam -r pos -s no -i gene_id aligned_reads.sam genes.gtf > gene_counts.txt
-Explanation of Parameters:
+       for FILE in $(ls *.out.bam ); do echo $FILE; sbatch --partition=pshort_el8 --job-name=FC_$(echo $FILE | cut -d'_' -f1,2) --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=FC_$(echo $FILE | cut -d'_' -f1,2).out --error=FC_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "module load Subread; featureCounts -t CDS -g ID -a /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff  -o CountsTable_$(echo $FILE | cut -d'_' -f1,2).txt $FILE -T 8"; sleep  1; done
 
-    -f: Specifies input format (sam or bam).
-    -r: Order of alignments in the input file (pos for position, name for read name).
-    -s: Strand-specific option (yes, no, or reverse).
-    -i: Attribute in the GTF file to use as gene ID (default is gene_id).
-    aligned_reads.sam: Path to the SAM/BAM file.
-    genes.gtf: Path to the GTF file.
+ 
