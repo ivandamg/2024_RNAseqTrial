@@ -23,7 +23,7 @@ Summary statistics of RNAseq trial.  Look at coverage of plant-bacteria, complet
 
 
 
-5. Index reference rhizobia
+5. Index genome rhizobia
 
        sbatch --partition=pshort_el8 --job-name=StarIndex --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=StarIndex.out --error=StarIndex.error --mail-type=END,FAIL --wrap "cd /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia; module load STAR/2.7.10a_alpha_220601-GCC-10.3.0; STAR --runThreadN 1 --runMode genomeGenerate --genomeDir /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia --genomeFastaFiles FribourgSMeliloti_Prokka.fna --sjdbGTFfile FribourgSMeliloti_Prokka_v2.gff --sjdbGTFfeatureExon CDS --sjdbOverhang 99 --genomeSAindexNbases 10"
 
