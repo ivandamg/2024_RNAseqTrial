@@ -47,4 +47,10 @@ USE gff from Genome mapped reference
     
        for FILE in $(ls *.out.bam ); do echo $FILE; sbatch --partition=pshort_el8 --job-name=FC_$(echo $FILE | cut -d'_' -f1,2) --time=0-01:00:00 --mem-per-cpu=64G --ntasks=1 --cpus-per-task=1 --output=FC_$(echo $FILE | cut -d'_' -f1,2).out --error=FC_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "module load Subread; featureCounts -p --countReadPairs -t CDS -g ID -a /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff  -o CountsTable_$(echo $FILE | cut -d'_' -f1,2).txt $FILE -T 8"; sleep  1; done
 
+
+7. Import count tables in R to calculate the rpkm (reads per kilobase per million for each gene)
+
+
+      
+
  
