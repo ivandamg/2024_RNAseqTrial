@@ -50,6 +50,18 @@ USE gff from Genome mapped reference
 
 7. Import count tables in R to calculate the rpkm (reads per kilobase per million for each gene)
 
+8. Calculate RNAseq metrics with CollectRnaSeqMetrics to disproportionate number of reads mapping to the 3’ ends of transcripts
+Poly(A) selection is performed via oligo(dT) bead capture, which will lead to 5' regions not being captured for a large proportion of transcripts when degraded RNA is used as input. This ultimately affects accurate transcript abundance estimation, as transcript length is used as a basis for normalizing read counts.
+
+a. transform annotation gff into refflat format with gffread
+
+         /data/users/imateusgonzalez/SOFTS/gffread/gffread -E /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.gff -T -o FribourgSMeliloti_Prokka_v2.refFlat
+
+b. run piccard
+
+
+         java -jar $EBROOTPICARD/picard.jar CollectRnaSeqMetrics -I /data/users/imateusgonzalez/2024_RNAseqTrial/03_UnmappedReads/150mg_L1_MappedRhizobiaAligned.sortedByCoord.out.bam -O /data/users/imateusgonzalez/2024_RNAseqTrial/03_UnmappedReads/150mg_L1_RNAseqMetrics.txt --REF_FLAT /data/users/imateusgonzalez/2024_RNAseqTrial/00_ReferenceGenomes/01_Rhizobia/FribourgSMeliloti_Prokka_v2.refFlat -STRAND FIRST_READ_TRANSCRIPTION_STRAND
+
 
       
 
